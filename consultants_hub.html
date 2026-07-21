@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adobe Solutions Consultants</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif; background:#f5f5f5; color:#333; }
+    .header { background:white; padding:2.5rem 2rem 2rem; border-bottom:1px solid #ddd; box-shadow:0 2px 4px rgba(0,0,0,0.05); }
+    .header-content { max-width:1200px; margin:0 auto; }
+    h1 { font-size:2.2rem; color:#000; margin-bottom:0.4rem; }
+    h1 span { color:#FF0000; }
+    .subtitle { color:#666; font-size:1rem; }
+    .controls { margin-top:1.5rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; }
+    .controls label { font-weight:500; color:#666; font-size:0.9rem; margin-right:0.4rem; }
+    select { padding:0.6rem 1rem; border:2px solid #ddd; border-radius:6px; font-size:0.95rem; background:white; transition:all 0.2s; }
+    select:hover { border-color:#FF0000; }
+    select:focus { outline:none; border-color:#FF0000; box-shadow:0 0 0 3px rgba(255,0,0,0.1); }
+    .container { max-width:1200px; margin:2.5rem auto; padding:0 1rem; }
+    .people-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:2rem 1.5rem; }
+    .person { background:white; border-radius:12px; padding:1.5rem 1rem; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:all 0.3s ease; display:flex; flex-direction:column; align-items:center; }
+    .person:hover { transform:translateY(-4px); box-shadow:0 10px 20px rgba(0,0,0,0.14); }
+    .avatar { width:120px; height:120px; border-radius:50%; overflow:hidden; background:linear-gradient(135deg,#FF0000,#CC0000); display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:600; margin-bottom:1rem; border:4px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+    .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+    .person-name { font-size:1.05rem; font-weight:600; color:#000; margin-bottom:0.5rem; }
+    .person-sessions { font-size:0.8rem; color:#666; line-height:1.45; }
+    .person-sessions .lbl { display:block; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.5px; color:#FF0000; font-weight:600; margin-bottom:0.35rem; }
+    .person-sessions ul { list-style:none; }
+    .person-sessions li { margin-bottom:0.3rem; }
+    .count-bar { background:#333; color:white; padding:1.25rem; text-align:center; margin-top:2.5rem; border-radius:8px; }
+    .count-bar b { color:#FF0000; font-size:1.6rem; margin-right:0.5rem; }
+    .empty { grid-column:1/-1; text-align:center; padding:3rem; color:#999; }
+    @media (max-width:768px){ h1{font-size:1.6rem;} .people-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1.5rem 1rem;} .avatar{width:90px;height:90px;font-size:1.5rem;} }
+</style>
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="controls">
+            <div>
+                <label for="catFilter">Focus area:</label>
+                <select id="catFilter">
+                    <option value="">All areas</option>
+                    <option value="B2B">B2B</option>
+                    <option value="Content, Commerce and Workflows">Content, Commerce &amp; Workflows</option>
+                    <option value="Data, Audiences, and Customer Journeys">Data, Audiences &amp; Customer Journeys</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="people-grid" id="grid"></div>
+    <div class="count-bar"><b id="count">0</b><span>consultants</span></div>
+</div>
+<script>
+const HEADSHOT_BASE = "https://raw.githubusercontent.com/ishikagobin-adobe/1-many-microsite/main/Images/";
+const people = [{"name": "Alex Pascual", "slug": "alex-pascual", "sessions": [{"title": "Account Orchestration: Unify Lead, Account & Buying Group Journeys for Full-Funnel Growth", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Alison Moulton", "slug": "alison-moulton", "sessions": [{"title": "Modern B2B Commerce: Personalized, Self?Serve Buying Experiences that Drive Revenue", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Catherine Mosher", "slug": "catherine-mosher", "sessions": [{"title": "Inside GenStudio for Performance Marketing: What's Possible & What's New", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Eli Cartier", "slug": "eli-cartier", "sessions": [{"title": "Inside GenStudio for Performance Marketing: What's Possible & What's New", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Esha Julka", "slug": "esha-julka", "sessions": [{"title": "Customer Acquisition: Strategic Planning for Reaching Unknown Prospects with Holistic Measurement", "cat": "Data, Audiences, and Customer Journeys"}], "cats": ["Data, Audiences, and Customer Journeys"]}, {"name": "Jennifer Hanki", "slug": "jennifer-hanki", "sessions": [{"title": "Modern B2B Commerce: Personalized, Self?Serve Buying Experiences that Drive Revenue", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Khalif Welch", "slug": "khalif-welch", "sessions": [{"title": "Inside Adobe Marketo", "cat": "B2B"}, {"title": "Inside Adobe Marketo Measure", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Lauren Conroy", "slug": "lauren-conroy", "sessions": [{"title": "Inside Adobe Marketo", "cat": "B2B"}, {"title": "Inside Adobe Marketo Measure", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Louis McRae", "slug": "louis-mcrae", "sessions": [{"title": "Account Orchestration: Unify Lead, Account & Buying Group Journeys for Full-Funnel Growth", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Mark Poullalion", "slug": "mark-poullalion", "sessions": [{"title": "Content?Led Growth: Make Your Content the Engine of Pipeline, Conversion, and Adoption", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Melanie Perry", "slug": "melanie-perry", "sessions": [{"title": "Reimagining Customer Engagement: Moving to a Unified, Customer-Centric Strategy", "cat": "Data, Audiences, and Customer Journeys"}], "cats": ["Data, Audiences, and Customer Journeys"]}, {"name": "Moyo Oyedji-Olaniyan", "slug": "moyo-oyedji-olaniyan", "sessions": [{"title": "Agentic Brand Activation: Winning Visibility, Quality & Trust in the AI Era", "cat": "Content, Commerce and Workflows"}, {"title": "Inside AEM Assets", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Nan Nixon", "slug": "nan-nixon", "sessions": [{"title": "Campaign Acceleration with GenStudio for Performance Marketing: Scaling Faster with Adobe AIDriven Content Workflows", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Owen Harris", "slug": "owen-harris", "sessions": [{"title": "Modern B2B Commerce: Personalized, Self?Serve Buying Experiences that Drive Revenue", "cat": "B2B"}], "cats": ["B2B"]}, {"name": "Priya Desai", "slug": "priya-desai", "sessions": [{"title": "Modern Asset Management: Govern Once, Reuse Everywhere", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Ray Molano", "slug": "ray-molano", "sessions": [{"title": "Content?Led Growth: Make Your Content the Engine of Pipeline, Conversion, and Adoption", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Robin Rubchenko", "slug": "robin-rubchenko", "sessions": [{"title": "Agentic Brand Activation: Winning Visibility, Quality & Trust in the AI Era", "cat": "Content, Commerce and Workflows"}, {"title": "Inside AEM Assets", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Steven Ariol", "slug": "steven-ariol", "sessions": [{"title": "Inside Adobe Marketo", "cat": "B2B"}, {"title": "Inside Adobe Workfront", "cat": "Content, Commerce and Workflows"}], "cats": ["B2B", "Content, Commerce and Workflows"]}, {"name": "Sulaimaan Adil", "slug": "sulaimaan-adil", "sessions": [{"title": "Modern Asset Management: Govern Once, Reuse Everywhere", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Susan Deisenroth", "slug": "susan-deisenroth", "sessions": [{"title": "Workflows Planning and MetaData", "cat": "Content, Commerce and Workflows"}], "cats": ["Content, Commerce and Workflows"]}, {"name": "Taylor Phillips", "slug": "taylor-phillips", "sessions": [{"title": "Campaign Acceleration with GenStudio for Performance Marketing: Scaling Faster with Adobe AIDriven Content Workflows", "cat": "B2B"}, {"title": "Inside Adobe Workfront", "cat": "Content, Commerce and Workflows"}], "cats": ["B2B", "Content, Commerce and Workflows"]}, {"name": "Ty Cammack", "slug": "ty-cammack", "sessions": [{"title": "Reimagining Customer Engagement: Moving to a Unified, Customer-Centric Strategy", "cat": "Data, Audiences, and Customer Journeys"}], "cats": ["Data, Audiences, and Customer Journeys"]}, {"name": "William Bryant", "slug": "william-bryant", "sessions": [{"title": "Account Orchestration: Unify Lead, Account & Buying Group Journeys for Full-Funnel Growth", "cat": "B2B"}, {"title": "Content Insights: Turning Content into Measurable Impact", "cat": "Content, Commerce and Workflows"}], "cats": ["B2B", "Content, Commerce and Workflows"]}, {"name": "Zack Gore", "slug": "zack-gore", "sessions": [{"title": "Customer Acquisition: Strategic Planning for Reaching Unknown Prospects with Holistic Measurement", "cat": "Data, Audiences, and Customer Journeys"}], "cats": ["Data, Audiences, and Customer Journeys"]}];
+let currentCat = "";
+
+function initials(name){
+    const p = name.split(" ").filter(Boolean);
+    return (p.length===1 ? p[0][0] : p[0][0]+p[p.length-1][0]).toUpperCase();
+}
+
+function render(){
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+    let list = people.slice();
+    if(currentCat) list = list.filter(p => p.cats.includes(currentCat));
+
+    if(list.length===0){
+        grid.innerHTML = '<div class="empty">No consultants match.</div>';
+        document.getElementById("count").textContent = "0";
+        return;
+    }
+
+    let shown = 0;
+    list.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "person";
+        card.style.display = "none";            // hidden until headshot confirmed
+        const url = HEADSHOT_BASE + p.slug + ".png";
+        const sessionItems = p.sessions.map(s => '<li>' + s.title + '</li>').join("");
+        card.innerHTML =
+            '<div class="avatar"><img src="'+url+'" alt="'+p.name+'"></div>' +
+            '<div class="person-name">'+p.name+'</div>' +
+            '<div class="person-sessions"><span class="lbl">Presenting</span><ul>'+sessionItems+'</ul></div>';
+        const img = card.querySelector("img");
+        img.onload = () => { card.style.display = "flex"; shown++; document.getElementById("count").textContent = shown; };
+        img.onerror = () => { card.remove(); };   // no headshot -> drop the person
+        grid.appendChild(card);
+    });
+    document.getElementById("count").textContent = shown;
+    // if after load nothing showed, show empty note
+    setTimeout(()=>{ if(grid.querySelectorAll('.person').length===0){ grid.innerHTML='<div class="empty">No headshots available yet.</div>'; } }, 2500);
+}
+
+document.getElementById("catFilter").addEventListener("change", e => { currentCat = e.target.value; render(); });
+render();
+</script>
+</body>
+</html>
