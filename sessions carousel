@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adobe Live Demos - Sessions</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif; background:#f5f5f5; color:#2b2b2b; }
+    .page { max-width:1280px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+    .page-head { margin-bottom:2rem; }
+    .page-head h1 { font-size:2rem; color:#111; margin-bottom:0.4rem; }
+    .page-head h1 span { color:#FF0000; }
+    .page-head p { color:#666; font-size:1rem; max-width:640px; }
+
+    .carousel-wrap { position:relative; }
+    .carousel { display:flex; gap:1.25rem; overflow-x:auto; scroll-behavior:smooth; padding:0.5rem 0.25rem 1.25rem; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; }
+    .carousel::-webkit-scrollbar { height:8px; }
+    .carousel::-webkit-scrollbar-thumb { background:#ddd; border-radius:4px; }
+    .carousel::-webkit-scrollbar-thumb:hover { background:#FF0000; }
+
+    .card { scroll-snap-align:start; flex:0 0 280px; width:280px; background:white; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform .25s ease, box-shadow .25s ease; display:flex; flex-direction:column; text-decoration:none; color:inherit; }
+    .card:hover { transform:translateY(-5px); box-shadow:0 12px 24px rgba(0,0,0,0.14); }
+
+    .thumb { position:relative; aspect-ratio:16/9; background:linear-gradient(135deg,#FF1a1a 0%,#B30000 100%); display:flex; align-items:flex-end; padding:1rem; overflow:hidden; }
+    .thumb img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .thumb .tile-label { position:relative; z-index:1; color:#fff; font-weight:700; font-size:1.05rem; letter-spacing:0.3px; text-shadow:0 1px 3px rgba(0,0,0,0.25); line-height:1.2; }
+
+    .card-body { padding:1rem 1.1rem 1.25rem; flex:1; display:flex; flex-direction:column; }
+    .card-title { font-size:0.98rem; font-weight:600; color:#111; line-height:1.3; margin-bottom:0.6rem; }
+    .card-products { font-size:0.8rem; color:#666; line-height:1.4; }
+    .card-products .lbl { display:block; font-size:0.64rem; text-transform:uppercase; letter-spacing:0.6px; color:#FF0000; font-weight:700; margin-bottom:0.25rem; }
+    .card-cta { margin-top:auto; padding-top:0.9rem; font-size:0.8rem; font-weight:600; color:#FF0000; display:flex; align-items:center; gap:0.35rem; }
+    .card-cta::after { content:"\2192"; transition:transform .2s; }
+    .card:hover .card-cta::after { transform:translateX(3px); }
+    .card.no-link { cursor:default; }
+    .card.no-link:hover { transform:none; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    .card.no-link .card-cta { color:#999; }
+    .card.no-link .card-cta::after { content:""; }
+
+    .nav-btn { position:absolute; top:calc(50% - 20px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%; border:none; background:white; box-shadow:0 2px 10px rgba(0,0,0,0.18); cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:5; transition:background .2s, opacity .2s; }
+    .nav-btn:hover { background:#FF0000; }
+    .nav-btn:hover svg { stroke:white; }
+    .nav-btn svg { width:18px; height:18px; stroke:#333; stroke-width:2.5; fill:none; }
+    .nav-btn.left { left:-14px; }
+    .nav-btn.right { right:-14px; }
+    .nav-btn[disabled] { opacity:0; pointer-events:none; }
+
+    @media (max-width:600px){
+        .page-head h1 { font-size:1.6rem; }
+        .card { flex-basis:230px; width:230px; }
+        .nav-btn { display:none; }
+    }
+</style>
+</head>
+<body>
+<div class="page">
+    <div class="carousel-wrap">
+        <button class="nav-btn left" id="navLeft"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="carousel" id="carousel"></div>
+        <button class="nav-btn right" id="navRight"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+</div>
+
+<script>
+/* =========================================================================
+   SESSION DATA - all sessions in one horizontal carousel.
+   To add a real thumbnail image or a hyperlink to any session, find it below
+   and fill in its "image" and/or "link" values (they start empty "").
+     image : a direct image URL (e.g. a raw GitHub link ending in .png/.jpg)
+     link  : the page a customer opens when they click the card
+   Leaving "image" empty shows the branded placeholder tile.
+   Leaving "link" empty makes the card non-clickable (no broken links).
+   ========================================================================= */
+const DATA = {"sessions": [{"title": "Inside GenStudio for Performance Marketing: What's Possible & What's New", "products": "GenStudio PeM", "tile": "GenStudio PeM", "image": "", "link": ""}, {"title": "Content-Led Growth: Make Your Content the Engine of Pipeline, Conversion, and Adoption", "products": "AEM Sites, AEM Sites Optimizer, AEM Assets, LLM Optimizer,Learning Manager", "tile": "AEM Sites", "image": "", "link": ""}, {"title": "Workflows Planning and MetaData", "products": "Workfront, Frame.io, AEM Assets", "tile": "Workfront", "image": "", "link": ""}, {"title": "Modern Asset Management: Govern Once, Reuse Everywhere", "products": "AEM Assets, Workfront", "tile": "AEM Assets", "image": "", "link": ""}, {"title": "Content Insights: Turning Content into Measurable Impact", "products": "Content Analytics, GenStudio PeM", "tile": "Content Analytics", "image": "", "link": ""}, {"title": "Agentic Brand Activation: Winning Visibility, Quality & Trust in the AI Era", "products": "AEM Sites, AEM Sites Optimizer, LLM Optimizer, Brand Concierge", "tile": "AEM Sites", "image": "", "link": ""}, {"title": "Inside AEM Assets", "products": "AEM Assets", "tile": "AEM Assets", "image": "", "link": ""}, {"title": "Inside Adobe Workfront", "products": "Workfront", "tile": "Workfront", "image": "", "link": ""}, {"title": "Adobe Brand Visibility", "products": "Adobe Brand Visibility", "tile": "Adobe Brand Visibility", "image": "", "link": ""}, {"title": "Inside Adobe Commerce", "products": "Commerce", "tile": "Commerce", "image": "", "link": ""}, {"title": "Inside Adobe Target", "products": "Target", "tile": "Target", "image": "", "link": ""}, {"title": "Reimagining Customer Engagement: Moving to a Unified, Customer-Centric Strategy", "products": "AJO, RTCDP, CJA, AJO Experimentation Accelerator", "tile": "AJO", "image": "", "link": ""}, {"title": "Customer Acquisition: Strategic Planning for Reaching Unknown Prospects with Holistic Measurement", "products": "RTCDP, RTCDP Collaboration, Mix Modeler, CJA, Content Analytics", "tile": "RTCDP", "image": "", "link": ""}, {"title": "Modern B2B Commerce: Personalized, Self-Serve Buying Experiences that Drive Revenue", "products": "Commerce, AJO B2B Edition, AEM Sites, AEM Assets", "tile": "Commerce", "image": "", "link": ""}, {"title": "Campaign Acceleration with GenStudio for Performance Marketing: Scaling Faster with Adobe AI–Driven Content Workflows", "products": "GenStudio PeM, Workfront", "tile": "GenStudio PeM", "image": "", "link": ""}, {"title": "Account Orchestration: Unify Lead, Account & Buying Group Journeys for Full-Funnel Growth", "products": "AJO B2B Edition, Marketo Engage,B2B RTCDP, CJA B2B Edition,Brand Concierge", "tile": "AJO B2B Edition", "image": "", "link": ""}, {"title": "Inside Adobe Marketo", "products": "Marketo", "tile": "Marketo", "image": "", "link": ""}, {"title": "Inside Adobe Marketo Measure", "products": "Measure", "tile": "Measure", "image": "", "link": ""}]};
+
+function el(tag, cls, html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function buildCard(s){
+    const hasLink = s.link && s.link.trim() !== "";
+    const card = el(hasLink ? "a" : "div", "card" + (hasLink ? "" : " no-link"));
+    if (hasLink){ card.href = s.link; card.target = "_blank"; card.rel = "noopener"; }
+
+    const thumb = el("div","thumb");
+    const hasImg = s.image && s.image.trim() !== "";
+    if (hasImg){
+        const img = el("img"); img.src = s.image; img.alt = esc(s.title);
+        img.onerror = () => { img.remove(); thumb.appendChild(el("div","tile-label", esc(s.tile))); };
+        thumb.appendChild(img);
+    }
+    if (!hasImg) thumb.appendChild(el("div","tile-label", esc(s.tile)));
+    card.appendChild(thumb);
+
+    const body = el("div","card-body");
+    body.appendChild(el("div","card-title", esc(s.title)));
+    const prod = el("div","card-products");
+    prod.innerHTML = '<span class="lbl">Products</span>' + esc(s.products || "-");
+    body.appendChild(prod);
+    if (hasLink) body.appendChild(el("div","card-cta", "Learn more"));
+    card.appendChild(body);
+    return card;
+}
+
+const carousel = document.getElementById("carousel");
+DATA.sessions.forEach(s => carousel.appendChild(buildCard(s)));
+
+const left = document.getElementById("navLeft");
+const right = document.getElementById("navRight");
+const step = () => Math.round(carousel.clientWidth * 0.8);
+left.addEventListener("click", () => carousel.scrollBy({left:-step(), behavior:"smooth"}));
+right.addEventListener("click", () => carousel.scrollBy({left:step(), behavior:"smooth"}));
+function updateArrows(){
+    left.disabled = carousel.scrollLeft <= 4;
+    right.disabled = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 4;
+}
+carousel.addEventListener("scroll", updateArrows);
+window.addEventListener("resize", updateArrows);
+requestAnimationFrame(updateArrows);
+</script>
+</body>
+</html>
